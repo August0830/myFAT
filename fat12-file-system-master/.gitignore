@@ -1,0 +1,6 @@
+build/
+bin/
+*.exe
+/disk/*
+!/disk/origin
+/utils/*.o
