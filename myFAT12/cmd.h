@@ -20,3 +20,11 @@
 
 //分解路径名找到希望建立的文件夹的名字（在最后）
 char* getPathEntname(const char* path,char*entname);
+//建立文件夹 会修改FAT内容
+int mkdirent(const char* entname,u16 dirClus,unsigned char*ramdisk);
+//实现mkdir的命令
+int mkdircmd(u16 clus,const char* path,unsigned char* ramdisk);
+//建立文件 修改FAT中内容
+int mkent(const char* entname,u16 dirClus,unsigned char*ramdisk);
+//实现touch指令
+int touchcmd(u16 clus,const char*path,unsigned char*ramdisk);

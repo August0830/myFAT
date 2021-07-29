@@ -1,5 +1,6 @@
 #include "disk_operation.h"
 #include <string.h>
+#include <stdlib.h>
 using namespace std;
 
 //将bootsector结构体中的数据写入缓存磁盘
@@ -99,10 +100,17 @@ void mystrcpy(char* dst,size_t len,char* src)
     //cout<<"new dst "<<dst<<endl;
 }
 
+/*char *strsep(char **stringp, const char *delim) {
+    return *stringp;
+}
+
+char *strdup(const char *s) {
+    return s;
+}*/
 
 char* strsep(char**strp,const char*delim)
 {
-    char* tok=*str;
+    char* tok=*strp;
     if(tok==NULL)
         return NULL;
     for(char* s=tok;*s!='\0';++s)

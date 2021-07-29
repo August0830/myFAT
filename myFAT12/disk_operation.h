@@ -22,7 +22,7 @@ void print_bootsector(const BootSector* mbr);
 void mystrcpy(char* dst,size_t len,char* src);
 //以delim为分隔符分割 返回token，
 //同时原字符串指针后移到分隔符后
-char* strsep(char**strp,const char*delim);
+///char* strsep(char**strp,const char*delim);
 //strcpy同样功能
-char* strdup(const char*s);
+//char* strdup(const char*s);
 
