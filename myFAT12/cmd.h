@@ -8,7 +8,7 @@
 #define DISK_IS_FULL 5
 #define NOT_RM_PRES_DIR 6
 #define INVALID_ARGUMET 7
-#define IS_DIRECTORY 8
+#define IS_DIR 8
 #define DIR_NOT_EMPTY 9
 #define FILE_ERROR 10
 #define OPER_NOT_PERM 11
@@ -28,3 +28,13 @@ int mkdircmd(u16 clus,const char* path,unsigned char* ramdisk);
 int mkent(const char* entname,u16 dirClus,unsigned char*ramdisk);
 //实现touch指令
 int touchcmd(u16 clus,const char*path,unsigned char*ramdisk);
+//展示文件内容
+int dispFile(Entry* file_entry,const unsigned char* ramdisk);
+//实现cat指令
+int catcmd(u16 clus,const char* path, unsigned char* ramdisk);
+//
+int editFile(Entry* file_entry,u16 dir_clus, unsigned char* ramdisk);
+//
+int editcmd(u16 clus,const char* path,unsigned char* ramdisk);
+//信号处理
+void ResInfo(int res);

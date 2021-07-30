@@ -22,6 +22,12 @@ void parseEntName(const char*entName,char *entname);
 bool entnameEq(const char* input,const char* entName);
 //根据名字找entry
 Entry getEntryByName(const char* entname,u16 dirClus,const unsigned char*ramdisk);
+//根据clus找entry
+Entry getEntryByClus(u16 ent_clus,u16 dir_clus,const unsigned char*ramdisk);
+//找到目录所在entry
+size_t getDirEnt(size_t *block_idx,u16 ent_clus,u16 dir_clus,const unsigned char* ramdisk);
+//获得entry所在block内的下标
+size_t getEntIdx(u16 ent_clus,const unsigned char*block);
 
 //从给定block中 从位置base开始分出长度为len的数字
 unsigned int parseNum(const unsigned char *block,size_t base,size_t len);

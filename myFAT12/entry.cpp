@@ -238,6 +238,44 @@ u16 parsePath(unsigned short *dirClus,const char* path,const unsigned char* ramd
     return entry.first_cluster;
 }
 
+Entry getEntryByClus(u16 ent_clus,u16 dir_clus,const unsigned char*ramdisk)
+{
+    if(dir_clus==0)//在根目录下读取的block的计算方式略有不同
+    {
+        for(size_t baseSec=19,secOfst=0;secOfst<14;secOfst++)
+        {
+            unsigned char block[BLOCKSIZE];
+            Read_rmdisk_block(ramdisk,baseSec+secOfst,block);
+            Entry entries[16];
+            size_t entCnt=parseEntBlock(block,entries);
+            //读出该块内所有entry
+            for(size_t i=0;i<entCnt;++i)
+                if(entries[i].first_cluster==ent_clus)
+                    return entries[i];
+        }
+        Entry entry;
+        entry.first_cluster=-1;
+        return entry;
+    }
+    else
+    {
+        for(unsigned short clus = dir_clus;clus!=ENT_LASTCLU;
+        clus=getNextClus(clus))
+        {
+            unsigned char block[BLOCKSIZE];
+            Read_rmdisk_block(ramdisk,clus+31,block);
+            Entry entries[16];
+            size_t entCnt=parseEntBlock(block,entries);
+            for(size_t i=0;i<entCnt;++i)
+                if(entries[i].first_cluster==ent_clus)
+                    return entries[i];
+        }
+    }
+    Entry entry;
+    entry.first_cluster=-1;
+    return entry;
+}
+
 Entry getEntryByName(const char* entname,u16 dirClus,const unsigned char*ramdisk)
 {
     if(dirClus==0)//在根目录下读取的block的计算方式略有不同
@@ -274,6 +312,48 @@ Entry getEntryByName(const char* entname,u16 dirClus,const unsigned char*ramdisk
     Entry entry;
     entry.first_cluster=-1;
     return entry;
+}
+
+size_t getEntIdx(u16 ent_clus,const unsigned char*block)
+{
+    for(size_t i=0;i<16;++i)
+    {
+        Entry entry = parseEntStr(block+i*BYTEPERENT);
+        if(entry.first_cluster==ent_clus)
+            return i;
+    }
+    return -1;
+}
+
+size_t getDirEnt(size_t *block_idx,u16 ent_clus,u16 dir_clus,const unsigned char* ramdisk)
+{
+    if(dir_clus==0)
+    {
+        for(size_t baseSec=19,sec_offset=0;sec_offset<14;sec_offset++)
+        {
+            unsigned char block[BLOCKSIZE];
+            Read_rmdisk_block(ramdisk,baseSec+sec_offset,block);
+            size_t ent_idx = getEntIdx(ent_clus,block);
+            if(ent_idx!=(size_t)-1)
+            {
+                *block_idx=baseSec+sec_offset;
+                return ent_idx;
+            }
+        }
+        return -1;
+    }
+    for(u16 clus = dir_clus;clus!=0xfff;clus=getNextClus(clus))
+    {
+        unsigned char block[BLOCKSIZE];
+        Read_rmdisk_block(ramdisk,clus+31,block);
+        size_t ent_idx = getEntIdx(ent_clus,block);
+        if(ent_idx!=(size_t)-1)
+        {
+            *block_idx=31+clus;
+            return ent_idx;
+        }
+    }
+    return -1;
 }
 
 unsigned short getNextClus(unsigned short clus)

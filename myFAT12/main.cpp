@@ -14,6 +14,7 @@ int main()
     //cin>>cmd;
     getline(cin,cmd);
     vector<string> cmdline;
+    unsigned short clus=0;
     while(cmd!="q"&&cmd!="quit")
     {
         if(cmd=="mknwdisk")
@@ -80,26 +81,15 @@ int main()
             } 
             else
             {
-                if (cmdline[0]=="mkdir");
-                {
-                    int res = mkdircmd(31,cmdline[1].c_str(),ramdisk);
-                    if (res == ROOT_IS_FULL)
-                        cout<<"Fail. Root is full.\n";
-                    else if(res == DISK_IS_FULL)
-                        cout<<"Fail. Disk is full.\n";
-                    if(res==0)
-                        cout<<"Suceed.\n";
-                }  
+                int res=-10;
+                if(cmdline[0]=="mkdir")
+                    res = mkdircmd(clus,cmdline[1].c_str(),ramdisk);
                 if(cmdline[0]=="touch")
-                {
-                    int res = touchcmd(31,cmdline[1].c_str(),ramdisk);
-                    if (res == ROOT_IS_FULL)
-                        cout<<"Fail. Root is full.\n";
-                    else if(res == DISK_IS_FULL)
-                        cout<<"Fail. Disk is full.\n";
-                    if(res==0)
-                        cout<<"Suceed.\n";
-                }  
+                    res = touchcmd(clus,cmdline[1].c_str(),ramdisk);
+                if(cmdline[0]=="cat")
+                    res = catcmd(clus,cmdline[1].c_str(),ramdisk);
+
+                ResInfo(res);
             }   
         }
         //cout<<cmd<<endl;
@@ -110,3 +100,4 @@ int main()
     
     return 0;
 }
+
