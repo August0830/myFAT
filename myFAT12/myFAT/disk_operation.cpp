@@ -100,13 +100,7 @@ void mystrcpy(char* dst,size_t len,char* src)
     //cout<<"new dst "<<dst<<endl;
 }
 
-/*char *strsep(char **stringp, const char *delim) {
-    return *stringp;
-}
 
-char *strdup(const char *s) {
-    return s;
-}*/
 
 char* strsep(char**strp,const char*delim)
 {
